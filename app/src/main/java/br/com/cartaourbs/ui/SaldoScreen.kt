@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ReceiptLong
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -71,9 +72,22 @@ fun SaldoScreen(
     onConsultar: () -> Unit,
     onSelecionarCartao: (String) -> Unit,
     onAbrirExtrato: () -> Unit,
+    onAbrirSobre: () -> Unit,
 ) {
     Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.app_name)) }) },
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.app_name)) },
+                actions = {
+                    IconButton(onClick = onAbrirSobre) {
+                        Icon(
+                            Icons.Outlined.Info,
+                            contentDescription = stringResource(R.string.sobre_abrir),
+                        )
+                    }
+                },
+            )
+        },
     ) { padding ->
         Column(
             modifier = Modifier
@@ -87,6 +101,13 @@ fun SaldoScreen(
             Text(
                 stringResource(R.string.saldo_subtitulo),
                 style = MaterialTheme.typography.bodyLarge,
+            )
+            // Aviso visível já na primeira tela (regra da Play Store para apps
+            // não oficiais de serviços públicos). Detalhes na tela "Sobre".
+            Text(
+                stringResource(R.string.aviso_nao_oficial_curto),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Spacer(Modifier.height(16.dp))
 

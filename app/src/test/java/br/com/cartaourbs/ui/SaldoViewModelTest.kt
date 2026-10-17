@@ -132,6 +132,27 @@ class SaldoViewModelTest {
         assertNull(armazenamento.salvas)
     }
 
+    @Test
+    fun `desmarcar lembrar apaga na hora, sem precisar consultar`() = runTest {
+        // A política de privacidade promete isso.
+        val armazenamento = FakeArmazenamento(CompletableDeferred(Credenciais(cpfValido, "salva")))
+        val vm = vm(armazenamento)
+
+        vm.onLembrarChange(false)
+
+        assertTrue(armazenamento.limpou)
+        assertTrue(consulta.pedidosSaldo.isEmpty())
+    }
+
+    @Test
+    fun `tela Sobre abre e volta para o saldo`() = runTest {
+        val vm = vm()
+        vm.abrirSobre()
+        assertEquals(Tela.SOBRE, vm.uiState.value.tela)
+        vm.voltar()
+        assertEquals(Tela.SALDO, vm.uiState.value.tela)
+    }
+
     // ---- Campos e validação ------------------------------------------------
 
     @Test

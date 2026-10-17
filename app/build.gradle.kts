@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -6,27 +7,72 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+/**
+ * Dados da chave de assinatura (upload key) para o build de release.
+ *
+ * Ficam em `keystore.properties`, na raiz do projeto, que NÃO vai para o git
+ * (ver .gitignore e docs/PUBLICACAO.md). Sem esse arquivo, o release é gerado
+ * sem assinatura: compila, mas não pode ser instalado nem enviado à Play Store.
+ */
+val assinatura = Properties().apply {
+    val arquivo = rootProject.file("keystore.properties")
+    if (arquivo.exists()) arquivo.inputStream().use { load(it) }
+}
+
 android {
+    // Pacote do código-fonte (classe R, BuildConfig). Não aparece para o usuário.
     namespace = "br.com.cartaourbs"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
-        applicationId = "br.com.cartaourbs"
+        // Identificador do app na Play Store. ATENÇÃO: depois do primeiro envio
+        // à Play Store ele não pode mais mudar. Sem "urbs" no nome, para não
+        // sugerir vínculo com a URBS.
+        applicationId = "br.com.saldotransportecwb"
         minSdk = 24
-        targetSdk = 35
+        // Exigência da Play Store para apps novos desde 31/08/2026.
+        targetSdk = 36
+        // Aumente versionCode a cada envio à Play Store (1, 2, 3...).
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Mostrados na tela "Sobre". Configure em gradle.properties antes de
+        // publicar (ver docs/PUBLICACAO.md). Vazios = a tela esconde o item.
+        buildConfigField(
+            "String", "URL_POLITICA_PRIVACIDADE",
+            "\"${providers.gradleProperty("urlPoliticaPrivacidade").getOrElse("")}\"",
+        )
+        buildConfigField(
+            "String", "EMAIL_CONTATO",
+            "\"${providers.gradleProperty("emailContato").getOrElse("")}\"",
+        )
+    }
+
+    signingConfigs {
+        if (assinatura.isNotEmpty()) {
+            create("release") {
+                // Caminho relativo à raiz do projeto, ou absoluto.
+                storeFile = rootProject.file(assinatura.getProperty("storeFile"))
+                storePassword = assinatura.getProperty("storePassword")
+                keyAlias = assinatura.getProperty("keyAlias")
+                keyPassword = assinatura.getProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // R8: remove código e recursos não usados e ofusca nomes.
+            // App menor e mais difícil de inspecionar.
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.findByName("release")
         }
     }
     compileOptions {
@@ -35,7 +81,7 @@ android {
     }
     buildFeatures {
         compose = true
-        // Gera BuildConfig.DEBUG, usado para ligar logs só no build de debug.
+        // Gera BuildConfig.DEBUG e VERSION_NAME, usados no app.
         buildConfig = true
     }
 }

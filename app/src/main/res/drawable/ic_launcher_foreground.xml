@@ -1,12 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Ícone: cartão transporte com a frente de um ônibus. Desenho próprio, sem
+    logo nem marca da URBS. Tudo dentro da área segura do ícone adaptativo
+    (círculo de 66dp no centro do quadro de 108dp).
+-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+    <!-- Cartão -->
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M30,42h48a4,4 0 0 1 4,4v16a4,4 0 0 1 -4,4h-48a4,4 0 0 1 -4,-4v-16a4,4 0 0 1 4,-4z" />
+        android:pathData="M30,34 H78 A6,6 0 0 1 84,40 V68 A6,6 0 0 1 78,74 H30 A6,6 0 0 1 24,68 V40 A6,6 0 0 1 30,34 Z" />
+    <!-- Ônibus (para-brisa e faróis vazados, mostrando o cartão) -->
     <path
         android:fillColor="#1565C0"
-        android:pathData="M30,50h48v6h-48z" />
+        android:fillType="evenOdd"
+        android:pathData="M46,39 H62 A4,4 0 0 1 66,43 V62 A4,4 0 0 1 62,66 H46 A4,4 0 0 1 42,62 V43 A4,4 0 0 1 46,39 Z
+            M47,42 H61 A2,2 0 0 1 63,44 V51 A2,2 0 0 1 61,53 H47 A2,2 0 0 1 45,51 V44 A2,2 0 0 1 47,42 Z
+            M45.5,60 A2,2 0 1 0 49.5,60 A2,2 0 1 0 45.5,60 Z
+            M58.5,60 A2,2 0 1 0 62.5,60 A2,2 0 1 0 58.5,60 Z" />
+    <!-- Rodas -->
+    <path
+        android:fillColor="#0D47A1"
+        android:pathData="M44,66 H49 V70 H44 Z M59,66 H64 V70 H59 Z" />
 </vector>

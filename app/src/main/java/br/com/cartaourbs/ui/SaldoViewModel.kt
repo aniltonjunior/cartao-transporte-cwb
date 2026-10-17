@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-enum class Tela { SALDO, EXTRATO }
+enum class Tela { SALDO, EXTRATO, SOBRE }
 
 /** Erro de preenchimento de um campo (texto em strings.xml). */
 enum class ErroCampo { OBRIGATORIO, CPF_INVALIDO }
@@ -110,8 +110,12 @@ class SaldoViewModel(
     fun onSenhaChange(valor: String) =
         _uiState.update { it.copy(senha = valor, erroSenha = null, erro = null) }
 
-    fun onLembrarChange(valor: Boolean) =
+    fun onLembrarChange(valor: Boolean) {
         _uiState.update { it.copy(lembrar = valor) }
+        // Desmarcar apaga na hora o que estava guardado (é o que a política
+        // de privacidade promete), sem esperar a próxima consulta.
+        if (!valor) viewModelScope.launch { credenciaisStore.limpar() }
+    }
 
     // ---- Saldo -------------------------------------------------------------
 
@@ -184,11 +188,15 @@ class SaldoViewModel(
         if (_uiState.value.extrato.movimentacoes == null) buscarExtrato()
     }
 
+    fun abrirSobre() = _uiState.update { it.copy(tela = Tela.SOBRE) }
+
+    /** Volta para a tela de saldo, de qualquer outra tela. */
     fun voltar() {
-        trabalhoExtrato?.cancel()
-        _uiState.update {
-            it.copy(tela = Tela.SALDO, extrato = it.extrato.copy(carregando = false))
+        if (_uiState.value.tela == Tela.EXTRATO) {
+            trabalhoExtrato?.cancel()
+            _uiState.update { it.copy(extrato = it.extrato.copy(carregando = false)) }
         }
+        _uiState.update { it.copy(tela = Tela.SALDO) }
     }
 
     fun mesAnterior() = mudarPeriodo(_uiState.value.extrato.periodo.anterior())

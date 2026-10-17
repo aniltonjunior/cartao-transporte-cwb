@@ -1,8 +1,11 @@
-<resources>
-    <string name="app_name">Cartão URBS</string>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="pt">
+    <!-- Nome sem "URBS": o app não é oficial (regra da Play Store sobre apps de governo). -->
+    <string name="app_name">Saldo Transporte CWB</string>
 
     <!-- Tela de saldo -->
-    <string name="saldo_subtitulo">Consulte o saldo do seu cartão transporte</string>
+    <string name="saldo_subtitulo">Consulte o saldo do seu cartão transporte de Curitiba</string>
+    <string name="aviso_nao_oficial_curto">App não oficial, sem vínculo com a URBS.</string>
+    <string name="sobre_abrir">Sobre o app</string>
     <string name="campo_cpf">CPF</string>
     <string name="campo_senha">Senha</string>
     <string name="mostrar_senha">Mostrar senha</string>
@@ -46,4 +49,31 @@
     <string name="tentar_novamente">Tentar novamente</string>
     <string name="mov_linha">Linha %1$s</string>
     <string name="mov_saldo">Saldo: %1$s</string>
+
+    <!--
+        Tela "Sobre". O texto de privacidade abaixo resume
+        docs/politica-de-privacidade.md: mantenha os dois iguais.
+    -->
+    <string name="sobre_titulo">Sobre</string>
+    <string name="sobre_versao">Versão %1$s</string>
+    <string name="sobre_aviso_titulo">Aplicativo não oficial</string>
+    <string name="sobre_aviso_texto">Este aplicativo foi feito de forma independente. Ele não tem vínculo com a URBS (Urbanização de Curitiba S.A.), com a Prefeitura de Curitiba nem com nenhum órgão de governo.</string>
+    <string name="sobre_fonte_titulo">De onde vêm os dados</string>
+    <string name="sobre_fonte_texto">O saldo e o extrato são lidos do Sistema de Bilhetagem Eletrônica (SBE) da URBS, com o seu CPF e a sua senha, do mesmo jeito que no site. Em caso de dúvida, confira sempre no site oficial.</string>
+    <string name="link_sbe">Site do SBE (sbe.curitiba.pr.gov.br)</string>
+    <string name="link_urbs">Cartão Transporte no site da URBS</string>
+    <string name="privacidade_titulo">Privacidade</string>
+    <string-array name="privacidade_itens">
+        <item>Seu CPF e sua senha são enviados apenas ao site oficial do SBE (URBS), por conexão segura (HTTPS), para fazer a consulta.</item>
+        <item>Se você marcar \"Lembrar meus dados\", eles ficam guardados só neste aparelho, cifrados com uma chave protegida pelo Android. Desmarcar a opção apaga os dados guardados.</item>
+        <item>O app não tem servidor próprio: nenhum dado é enviado ao desenvolvedor nem a terceiros.</item>
+        <item>O app não usa anúncios, rastreamento nem ferramentas de análise.</item>
+        <item>Saldo, cartões e extrato aparecem só na tela e não ficam guardados.</item>
+        <item>Desinstalar o app apaga todos os dados guardados.</item>
+    </string-array>
+    <string name="privacidade_online">Ler a política de privacidade completa</string>
+    <string name="sobre_contato">Contato: %1$s</string>
+    <string name="licencas_titulo">Bibliotecas de código aberto</string>
+    <string name="licencas_texto">Kotlin, Jetpack (AndroidX), Jetpack Compose, Material Design, Retrofit, OkHttp, Okio e Tink: Apache License 2.0. Jsoup: MIT License.</string>
+    <string name="erro_abrir_link">Não foi possível abrir o link.</string>
 </resources>

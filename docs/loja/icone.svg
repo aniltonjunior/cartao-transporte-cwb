@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Ícone da Play Store (exportar em 512x512 PNG: ver docs/loja/gerar-imagens.sh).
+    Mesmo desenho de app/src/main/res/drawable/ic_launcher_foreground.xml.
+    A Play Store aplica sozinha o recorte de cantos arredondados.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 108 108">
+  <rect width="108" height="108" fill="#1565C0"/>
+  <g transform="translate(54 54) scale(1.25) translate(-54 -54)">
+    <path fill="#FFFFFF" d="M30,34 H78 A6,6 0 0 1 84,40 V68 A6,6 0 0 1 78,74 H30 A6,6 0 0 1 24,68 V40 A6,6 0 0 1 30,34 Z"/>
+    <path fill="#1565C0" fill-rule="evenodd" d="M46,39 H62 A4,4 0 0 1 66,43 V62 A4,4 0 0 1 62,66 H46 A4,4 0 0 1 42,62 V43 A4,4 0 0 1 46,39 Z M47,42 H61 A2,2 0 0 1 63,44 V51 A2,2 0 0 1 61,53 H47 A2,2 0 0 1 45,51 V44 A2,2 0 0 1 47,42 Z M45.5,60 A2,2 0 1 0 49.5,60 A2,2 0 1 0 45.5,60 Z M58.5,60 A2,2 0 1 0 62.5,60 A2,2 0 1 0 58.5,60 Z"/>
+    <path fill="#0D47A1" d="M44,66 H49 V70 H44 Z M59,66 H64 V70 H59 Z"/>
+  </g>
+</svg>

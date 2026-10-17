@@ -9,3 +9,13 @@
 .cxx
 local.properties
 /app/build
+/.kotlin
+
+# Chave de assinatura e senhas: NUNCA versionar (ver docs/PUBLICACAO.md).
+keystore.properties
+*.jks
+*.keystore
+
+# Pacotes gerados para a loja.
+*.aab
+*.apk

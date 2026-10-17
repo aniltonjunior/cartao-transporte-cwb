@@ -31,7 +31,12 @@ class MainActivity : ComponentActivity() {
                         onConsultar = vm::consultar,
                         onSelecionarCartao = vm::selecionarCartao,
                         onAbrirExtrato = vm::abrirExtrato,
+                        onAbrirSobre = vm::abrirSobre,
                     )
+                    Tela.SOBRE -> {
+                        BackHandler(onBack = vm::voltar)
+                        SobreScreen(onVoltar = vm::voltar)
+                    }
                     Tela.EXTRATO -> {
                         // Botão/gesto "voltar" do sistema volta para o saldo.
                         BackHandler(onBack = vm::voltar)

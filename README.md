@@ -1,10 +1,13 @@
-# Cartão URBS — consulta de saldo
+# Saldo Transporte CWB
 
 App Android (Kotlin + Jetpack Compose) para consultar o saldo e o extrato do
-Cartão Transporte da URBS (Curitiba).
+cartão transporte de Curitiba.
 
-> Projeto de aprendizado. A URBS não oferece API pública oficial, então o app
-> reproduz o acesso que o site do SBE (Sistema de Bilhetagem Eletrônica) faz.
+> **App não oficial**, sem vínculo com a URBS ou a Prefeitura de Curitiba. A
+> URBS não oferece API pública, então o app reproduz o acesso que o site do
+> SBE (Sistema de Bilhetagem Eletrônica) faz.
+
+Para publicar na Google Play, veja [docs/PUBLICACAO.md](docs/PUBLICACAO.md).
 
 ## O que o app faz
 
@@ -14,6 +17,7 @@ Cartão Transporte da URBS (Curitiba).
 - Se a conta tem mais de um cartão, permite escolher qual consultar.
 - Mostra o extrato do cartão mês a mês (o mais recente primeiro).
 - Tema claro/escuro automático e cores dinâmicas no Android 12+.
+- Tela "Sobre" com aviso de app não oficial, fonte dos dados e privacidade.
 
 ## Como abrir e rodar
 
@@ -23,9 +27,13 @@ Cartão Transporte da URBS (Curitiba).
 4. Conecte um celular (com depuração USB) ou crie um emulador.
 5. Clique em **Run** (▶). O app instala e abre.
 
-Versões: Gradle 9.0, Android Gradle Plugin 8.13, Kotlin 2.1, `compileSdk` 35,
-`minSdk` 24 (Android 7.0+). O Gradle precisa rodar com JDK 17 a 24; o JDK que
-vem com o Android Studio serve.
+Versões: Gradle 9.0, Android Gradle Plugin 8.13, Kotlin 2.1, `compileSdk` e
+`targetSdk` 36, `minSdk` 24 (Android 7.0+). O Gradle precisa rodar com JDK 17
+a 24; o JDK que vem com o Android Studio serve.
+
+O build de release usa R8 e é assinado com a chave de `keystore.properties`
+(fora do git). Sem esse arquivo, o release sai sem assinatura. Detalhes em
+[docs/PUBLICACAO.md](docs/PUBLICACAO.md).
 
 ## Como funciona a consulta
 
@@ -123,6 +131,7 @@ ui/
   MainActivity.kt          -> ponto de entrada; navegação simples por estado
   SaldoScreen.kt           -> tela de login + saldo + seletor de cartão
   ExtratoScreen.kt         -> tela do extrato, mês a mês
+  SobreScreen.kt           -> aviso não oficial, fonte dos dados, privacidade
   SaldoViewModel.kt        -> estado das telas (MVVM) + Factory (injeção manual)
   Mensagens.kt             -> tipo de erro -> texto de strings.xml
   CpfVisualTransformation  -> máscara visual do CPF
