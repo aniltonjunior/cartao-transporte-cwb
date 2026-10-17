@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="ic_launcher_background">#1565C0</color>
+    <!-- Mesmo tom do fundo do tema claro do Compose. -->
+    <color name="fundo_janela">#FFF9F9FF</color>
 </resources>

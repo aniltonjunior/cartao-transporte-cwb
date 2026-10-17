@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Modo escuro do sistema: tema escuro da janela até o Compose desenhar. -->
+    <style name="Theme.CartaoUrbs" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/fundo_janela</item>
+    </style>
+</resources>

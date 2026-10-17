@@ -57,6 +57,30 @@ class FormularioParserTest {
     }
 
     @Test
+    fun `situacao Inativo nao conta como ativo`() {
+        // Regressão: a regra antiga usava contains("Ativo") e "Inativo" passava.
+        val html = """
+            <input name="documentoNacional" value="11122233344"/>
+            <select name="cartao">
+              <option value="10">0000000001 - Usuário - Inativo</option>
+              <option value="20">0000000002 - Usuário - Ativo</option>
+            </select>
+        """.trimIndent()
+        val form = requireNotNull(FormularioParser.parse(html))
+        assertEquals(false, form.cartoes[0].ativo)
+        assertEquals("20", form.cartaoPreferido?.id)
+        assertEquals("Inativo", form.cartoes[0].situacao)
+    }
+
+    @Test
+    fun `cartaoOuPreferido escolhe pelo id ou cai para o preferido`() {
+        val form = requireNotNull(FormularioParser.parse(htmlFormulario))
+        assertEquals("1000002", form.cartaoOuPreferido("1000002")?.id)
+        assertEquals("1000001", form.cartaoOuPreferido("nao-existe")?.id)
+        assertEquals("1000001", form.cartaoOuPreferido(null)?.id)
+    }
+
+    @Test
     fun `retorna nulo quando nao ha select de cartao`() {
         val html = "<form><input name='documentoNacional' value='x'/></form>"
         assertNull(FormularioParser.parse(html))

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Android 11 e anteriores: regras do backup automático. Usado só se o backup
-    for religado (android:allowBackup="true"); mantém as credenciais de fora.
+    for religado (android:allowBackup="true"); mantém as credenciais cifradas e
+    o keyset do Tink de fora.
 -->
 <full-backup-content>
-    <exclude domain="sharedpref" path="credenciais_urbs.xml" />
+    <exclude domain="file" path="datastore/credenciais_seguras.preferences_pb" />
+    <exclude domain="sharedpref" path="tink_keyset_credenciais.xml" />
 </full-backup-content>

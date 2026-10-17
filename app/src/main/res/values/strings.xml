@@ -1,3 +1,49 @@
 <resources>
     <string name="app_name">Cartão URBS</string>
+
+    <!-- Tela de saldo -->
+    <string name="saldo_subtitulo">Consulte o saldo do seu cartão transporte</string>
+    <string name="campo_cpf">CPF</string>
+    <string name="campo_senha">Senha</string>
+    <string name="mostrar_senha">Mostrar senha</string>
+    <string name="ocultar_senha">Ocultar senha</string>
+    <string name="lembrar_dados">Lembrar meus dados neste aparelho</string>
+    <string name="botao_consultar">Consultar saldo</string>
+    <string name="botao_consultando">Consultando…</string>
+    <string name="carregando">Carregando</string>
+    <string name="saldo_atual">Saldo atual</string>
+    <string name="saldo_titular">Titular: %1$s</string>
+    <string name="saldo_cartao">Cartão: %1$s</string>
+    <string name="saldo_atualizado">Atualizado: %1$s</string>
+    <string name="campo_cartao">Cartão</string>
+    <string name="cartao_opcao">%1$s · %2$s</string>
+    <string name="botao_extrato">Ver extrato</string>
+
+    <!-- Erros de preenchimento -->
+    <string name="erro_campo_obrigatorio">Campo obrigatório.</string>
+    <string name="erro_cpf_invalido">CPF inválido. Confira os números.</string>
+
+    <!-- Erros de consulta (ver data/model TipoErro) -->
+    <string name="erro_credenciais_invalidas">Usuário ou senha inválidos.</string>
+    <string name="erro_sessao_perdida">Não foi possível entrar no SBE. Confira usuário e senha e tente novamente.</string>
+    <string name="erro_do_site">O site da URBS respondeu com erro (HTTP %1$d). Tente novamente mais tarde.</string>
+    <string name="erro_do_site_sem_codigo">O site da URBS respondeu com erro. Tente novamente mais tarde.</string>
+    <string name="erro_sem_conexao">Não foi possível conectar ao site da URBS. Verifique sua internet e tente novamente.</string>
+    <string name="erro_inesperado">Erro inesperado na consulta. Tente novamente.</string>
+    <string name="erro_cartoes_nao_encontrados">Não encontrei a lista de cartões na página. O layout do SBE pode ter mudado.</string>
+    <string name="erro_sem_cartao">Nenhum cartão disponível na conta.</string>
+    <string name="erro_saldo_nao_encontrado">Consulta feita, mas não localizei o saldo na resposta. O layout do SBE pode ter mudado.</string>
+    <string name="erro_usuario_extrato">Não foi possível identificar o usuário para o extrato. O site pode ter mudado.</string>
+    <string name="erro_extrato_nao_encontrado">Não localizei as movimentações na resposta do site. O layout do SBE pode ter mudado.</string>
+
+    <!-- Tela de extrato -->
+    <string name="extrato_titulo">Extrato</string>
+    <string name="extrato_cartao">Cartão %1$s</string>
+    <string name="voltar">Voltar</string>
+    <string name="mes_anterior">Mês anterior</string>
+    <string name="mes_seguinte">Próximo mês</string>
+    <string name="extrato_vazio">Nenhuma movimentação neste mês.</string>
+    <string name="tentar_novamente">Tentar novamente</string>
+    <string name="mov_linha">Linha %1$s</string>
+    <string name="mov_saldo">Saldo: %1$s</string>
 </resources>

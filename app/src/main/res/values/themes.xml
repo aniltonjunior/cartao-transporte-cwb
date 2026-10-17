@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.CartaoUrbs" parent="android:Theme.Material.Light.NoActionBar" />
+    <!--
+        Tema da janela (antes do Compose desenhar). As cores da interface vêm
+        de ui/theme/Theme.kt; aqui só evitamos um fundo de cor errada na
+        abertura. A versão escura fica em values-night/themes.xml.
+    -->
+    <style name="Theme.CartaoUrbs" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/fundo_janela</item>
+    </style>
 </resources>

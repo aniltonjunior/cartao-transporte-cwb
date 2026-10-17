@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Android 12+ (API 31+): regras de backup na nuvem e de transferência entre
-    aparelhos. As credenciais ficam fora dos dois: a chave que as decifra mora
-    no Android Keystore e não é copiada, então o arquivo restaurado seria
-    ilegível.
+    aparelhos. As credenciais cifradas e o keyset do Tink ficam fora dos dois:
+    a chave mestra que os abre mora no Android Keystore e não é copiada, então
+    os arquivos restaurados seriam ilegíveis.
 -->
 <data-extraction-rules>
     <cloud-backup>
-        <exclude domain="sharedpref" path="credenciais_urbs.xml" />
+        <exclude domain="file" path="datastore/credenciais_seguras.preferences_pb" />
+        <exclude domain="sharedpref" path="tink_keyset_credenciais.xml" />
     </cloud-backup>
     <device-transfer>
-        <exclude domain="sharedpref" path="credenciais_urbs.xml" />
+        <exclude domain="file" path="datastore/credenciais_seguras.preferences_pb" />
+        <exclude domain="sharedpref" path="tink_keyset_credenciais.xml" />
     </device-transfer>
 </data-extraction-rules>

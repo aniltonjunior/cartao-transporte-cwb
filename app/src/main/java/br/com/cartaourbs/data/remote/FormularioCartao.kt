@@ -1,21 +1,7 @@
 package br.com.cartaourbs.data.remote
 
+import br.com.cartaourbs.data.model.CartaoOpcao
 import org.jsoup.Jsoup
-
-/**
- * Um cartão listado no formulário de seleção do SBE.
- *
- * - [id]: value interno do <option> (ex.: "1000001"), usado no POST.
- * - [numero]: número impresso do cartão (ex.: "0001234567").
- * - [descricao]: texto completo do option (ex.: "0001234567 - Usuário - Ativo").
- * - [ativo]: true quando a descrição indica "Ativo".
- */
-data class CartaoOpcao(
-    val id: String,
-    val numero: String,
-    val descricao: String,
-    val ativo: Boolean,
-)
 
 /**
  * Dados extraídos da página de seleção de cartão
@@ -28,11 +14,18 @@ data class FormularioCartao(
     /** Cartão preferido para consulta: o primeiro "Ativo", ou o primeiro da lista. */
     val cartaoPreferido: CartaoOpcao?
         get() = cartoes.firstOrNull { it.ativo } ?: cartoes.firstOrNull()
+
+    /** O cartão com [id], ou o [cartaoPreferido] se o id for nulo ou não existir. */
+    fun cartaoOuPreferido(id: String?): CartaoOpcao? =
+        cartoes.firstOrNull { it.id == id } ?: cartaoPreferido
 }
 
 /**
  * Lê a página de seleção e extrai o CPF (campo `documentoNacional`) e a lista
  * de cartões do `<select name="cartao">`.
+ *
+ * Cada option tem o formato "NUMERO - Tipo - Situação",
+ * ex.: "0001234567 - Usuário - Ativo".
  */
 object FormularioParser {
 
@@ -52,11 +45,13 @@ object FormularioParser {
             if (id.isEmpty()) return@mapNotNull null
             val descricao = op.text().trim()
             val numero = descricao.substringBefore(" - ").trim()
+            val situacao = descricao.substringAfterLast(" - ", missingDelimiterValue = "").trim()
             CartaoOpcao(
                 id = id,
                 numero = numero,
                 descricao = descricao,
-                ativo = descricao.contains("Ativo", ignoreCase = true),
+                // Comparação exata: "Inativo" contém "ativo" e não pode contar.
+                ativo = situacao.equals("Ativo", ignoreCase = true),
             )
         }
 

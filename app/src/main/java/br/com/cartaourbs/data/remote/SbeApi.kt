@@ -5,6 +5,7 @@ import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 /**
@@ -12,19 +13,27 @@ import retrofit2.http.POST
  * Eletrônica (SBE) da URBS.
  *
  * IMPORTANTE: a URBS não publica uma API oficial. Estas chamadas reproduzem
- * exatamente o que o site web faz quando você consulta o saldo. Por isso,
- * retornamos [ResponseBody] bruto (HTML) e extraímos os dados com Jsoup.
+ * exatamente o que o site web faz. Por isso retornamos [ResponseBody] bruto
+ * (HTML) e extraímos os dados com Jsoup.
  *
  * Fluxo real capturado do site:
  *   1. POST /sbe-web/login/login.html           -> 302, cria sessão (cookie)
- *   2. GET  /sbe-web/usuario/consultarInformacoesCartaoUsuario.html
- *                                                -> HTML com saldo atual,
- *                                                   titular e lista de cartões
- *   (O POST na mesma URL só é usado para TROCAR o cartão selecionado, e exige
- *    documentoNacional + id interno do cartão. Por isso o padrão é o GET.)
+ *   2. GET  /sbe-web/central/principal.html     -> área logada
+ *   3. GET  /sbe-web/usuario/consultarInformacoesCartaoUsuario.html
+ *                                                -> formulário: CPF + cartões
+ *   4. POST (mesma URL) documentoNacional + cartao
+ *                                                -> página com o saldo
+ *   5. POST /sbe-web/v2/usuario/consultarInformacoesCartaoUsuarioContaCorrente.html
+ *                                                -> extrato do período
  *
  * A sessão é mantida por cookie (JSESSIONID). O OkHttp guarda o cookie do
- * login automaticamente (ver SbeClient) e o reenvia na consulta.
+ * login automaticamente (ver SbeClient) e o reenvia nas chamadas seguintes.
+ *
+ * TODO(logout): o app não encerra a sessão no servidor, porque ainda não
+ * conhecemos o endpoint de saída do SBE (o botão "Sair" da página só fecha a
+ * janela). Cada consulta deixa uma sessão aberta, que expira sozinha. Para
+ * implementar: capture no navegador (F12 > Network) a requisição feita ao
+ * sair do SBE, adicione aqui e chame no fim de SaldoRepository.abrirCartao.
  */
 interface SbeApi {
 
@@ -49,13 +58,6 @@ interface SbeApi {
     ): Response<ResponseBody>
 
     /**
-     * Busca a página com o saldo atual, o titular e a lista de cartões.
-     *
-     * Este é o GET que o site faz ao abrir a tela logo após o login. Já traz
-     * o saldo do cartão padrão, sem precisar enviar CPF nem id do cartão.
-     * Exige estar logado (cookie de sessão).
-     */
-    /**
      * Página inicial da área logada. O navegador a acessa logo após o login
      * (passando por alguns redirects). Chamá-la "aquece" a sessão antes de
      * consultar o cartão, reproduzindo o comportamento do site.
@@ -63,20 +65,42 @@ interface SbeApi {
     @GET("sbe-web/central/principal.html")
     suspend fun principal(): Response<ResponseBody>
 
+    /**
+     * Abre o formulário de seleção de cartão: traz o CPF (campo
+     * `documentoNacional`) e a lista de cartões (`<select name="cartao">`).
+     * Esta página NÃO tem o saldo. Exige estar logado (cookie de sessão).
+     */
     @GET("sbe-web/usuario/consultarInformacoesCartaoUsuario.html")
     suspend fun consultarInformacoesCartao(): Response<ResponseBody>
 
     /**
-     * Troca o cartão selecionado e devolve a página com o saldo desse cartão.
-     *
-     * Usado apenas quando o usuário tem mais de um cartão e quer consultar um
-     * específico. Exige o CPF (`documentoNacional`) e o id interno do cartão
-     * (`cartao`), que vêm do `<select name="cartao">` da página.
+     * Envia o formulário escolhendo um cartão e devolve a página com o saldo
+     * dele. Exige o CPF (`documentoNacional`) e o id interno do cartão
+     * (`cartao`), que vêm do formulário acima. Mandar campos vazios gera
+     * HTTP 500.
      */
     @FormUrlEncoded
     @POST("sbe-web/usuario/consultarInformacoesCartaoUsuario.html")
     suspend fun selecionarCartao(
         @Field("documentoNacional") documentoNacional: String,
         @Field("cartao") cartao: String,
+    ): Response<ResponseBody>
+
+    /**
+     * Extrato (movimentações) do período. O site faz esta chamada via
+     * JavaScript (jQuery), por isso mandamos o cabeçalho X-Requested-With.
+     *
+     * @param idUsuario identificador interno do usuário no SBE (não é o CPF
+     *   nem o id do cartão); vem da página do cartão (ver ExtratoParser).
+     * @param dataInicial "dd/MM/yyyy".
+     * @param dataFinal "dd/MM/yyyy".
+     */
+    @FormUrlEncoded
+    @Headers("X-Requested-With: XMLHttpRequest")
+    @POST("sbe-web/v2/usuario/consultarInformacoesCartaoUsuarioContaCorrente.html")
+    suspend fun extrato(
+        @Field("filtro.idUsuario") idUsuario: String,
+        @Field("filtro.dataInicial") dataInicial: String,
+        @Field("filtro.dataFinal") dataFinal: String,
     ): Response<ResponseBody>
 }

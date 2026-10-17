@@ -31,7 +31,7 @@ class SaldoParserTest {
     fun `sem rotulo usa a posicao da pagina real - ultimo valor e o saldo atual`() {
         val saldo = requireNotNull(SaldoParser.parse(htmlSaldoSemRotulo))
         assertEquals(5100L, saldo.saldoCentavos)
-        assertEquals("R${'$'} 51,00", saldo.saldoFormatado)
+        assertEquals("R${'$'} 51,00", saldo.saldoFormatado.replace('\u00A0', ' '))
     }
 
     @Test
